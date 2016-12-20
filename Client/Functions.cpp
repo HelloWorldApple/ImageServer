@@ -65,18 +65,28 @@ string image2string(const Mat& image){
     return toSend;
 }
 
-string process2string(int method,const Mat&image){
-    string res;
-    char methodbuf[sizeof(int)];
-    memcpy(methodbuf,&method,sizeof(method));
-    string methodstring=string(methodbuf,sizeof methodbuf);
-    string imagestring=image2string(image);
-    return methodstring+imagestring;
-}
-void rgb2gray(const Mat& image,int acceptfd){
-    cv::medianBlur(image,image,11);
+string process2string(int method,const string&imagename,const Mat&image){
+    if(method==(int)GET){
+        char methodbuf[sizeof(int)];
+        memcpy(methodbuf,&method,sizeof(method));
 
-    string toSend=image2string(image);
-    WriteAll(acceptfd,toSend.data(),toSend.size());
+        int imagenamelen=imagename.length();
+        char namelenbuf[sizeof(int)];
+        memcpy(namelenbuf,&imagenamelen,sizeof(int));
+        string methodstring=string(methodbuf,sizeof methodbuf);
+        string imagenamelenstring=string(namelenbuf,sizeof namelenbuf);
+        return methodstring+imagenamelenstring+imagename;
+    }else{
+        char methodbuf[sizeof(int)];
+        memcpy(methodbuf,&method,sizeof(method));
 
+        int imagenamelen=imagename.length();
+        char namelenbuf[sizeof(int)];
+        memcpy(namelenbuf,&imagenamelen,sizeof(int));
+
+        string methodstring=string(methodbuf,sizeof methodbuf);
+        string imagenamelenstring=string(namelenbuf,sizeof namelenbuf);
+        string imagestring=image2string(image);
+        return methodstring+imagenamelenstring+imagename+imagestring;
+    }
 }

@@ -15,44 +15,85 @@ const int MAXFILESIZE=1000000;
 
 
 
-
+//request:method(int)+imagename(namelen(int)+name(char*))+image(row(int)+col(int)+type(int)+MatDatalength(int)+MatData(char*))
 int main(int argc, char *argv[])
 {
+
+    argc=3;
+    if(argc!=3){
+        cerr<<"useage:./Client METHOD(0:medianblur\1:save) IMAGENAME";
+        return 1;
+    }
+    string imagename="lena.jpg";//;argv[2];
+    METHOD methodname=MEDIANBLUR;//argv[1];
 
     int sockfd=CreateNonblockingOrDie(PF_INET);
     Socket socket(sockfd);
     socket.setReuseAddr(1);
     socket.setReusePort(1);
     Addr serverAddr(SERVER_IP,SERVER_PORT);
-
     socket.connect(serverAddr);
 
-    Mat image=imread("lena.jpg");
-//request:method(int)+image(row(int)+col(int)+type(int)+MatDatalength(int)+MatData(char*))
-    string requeststring=process2string((int)MEDIANBLUR,image);
+    Mat image;
+    string requeststring;
+    switch(methodname){
+    case MEDIANBLUR:{
 
-    //cout<<imagestring.size();
-    for(int i=0;i<4;i++){
+        image=imread(imagename);
+        requeststring=process2string((int)methodname,imagename,image);
         WriteAll(sockfd,requeststring.data(),requeststring.size());
-    }
+        Epoll epoller(5);
+        epoller.add(sockfd,EPOLLIN);
 
-    Epoll epoller(5);
-    epoller.add(sockfd,EPOLLIN);
-
-    while(1){
-        cout<<"inter loop"<<endl;
-        int eventcount=epoller.wait(10);
-        const struct epoll_event *events=epoller.getEvents();
-        for(int i=0;i<eventcount;i++){
-            if(events[i].data.fd==sockfd){
-                Mat image=readMat(sockfd);
-                string windowname="res"+to_string(i);
-                namedWindow(windowname);
-                imshow(windowname,image);
-                waitKey(100);
+        while(1){
+            cout<<"inter loop"<<endl;
+            int eventcount=epoller.wait(10);
+            const struct epoll_event *events=epoller.getEvents();
+            for(int i=0;i<eventcount;i++){
+                if(events[i].data.fd==sockfd){
+                    Mat image=readMat(sockfd);
+                    string windowname="res"+to_string(i);
+                    namedWindow(windowname);
+                    imshow(windowname,image);
+                    waitKey(1000);
+                    return 0;
+                }
             }
         }
-    }
+        break;
+    }//case
+    case SAVE:{
+        image=imread(imagename);
+        requeststring=process2string((int)methodname,imagename,image);
+
+        WriteAll(sockfd,requeststring.data(),requeststring.size());
+
+        break;
+    }//case
+    case GET:{
+        requeststring=process2string((int)methodname,imagename,Mat());
+        WriteAll(sockfd,requeststring.data(),requeststring.size());
+        Epoll epoller(5);
+        epoller.add(sockfd,EPOLLIN);
+
+        while(1){
+            cout<<"inter loop"<<endl;
+            int eventcount=epoller.wait(10);
+            const struct epoll_event *events=epoller.getEvents();
+            for(int i=0;i<eventcount;i++){
+                if(events[i].data.fd==sockfd){
+                    Mat image=readMat(sockfd);
+                    string windowname=imagename;
+                    namedWindow(windowname);
+                    imshow(windowname,image);
+                    waitKey(1000);
+                    return 0;
+                }
+            }
+        }
+        break;
+    }//case
+    }//switch
 
 
 }

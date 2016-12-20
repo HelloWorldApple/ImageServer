@@ -17,7 +17,7 @@ Epoll::~Epoll(){
 void Epoll::add(int fd,uint32_t event){
     struct epoll_event ev;
     ev.data.fd=fd;
-    if(_et) ev.events=event|EPOLLIN;
+    if(_et) ev.events=event|EPOLLET;
     else ev.events=event;
     epoll_ctl(_epfd,EPOLL_CTL_ADD,fd,&ev);
 }
@@ -25,7 +25,7 @@ void Epoll::add(int fd,uint32_t event){
 void Epoll::del(int fd,uint32_t event){
     struct epoll_event ev;
     ev.data.fd=fd;
-    if(_et) ev.events=event|EPOLLIN;
+    if(_et) ev.events=event|EPOLLET;
     else ev.events=event;
     epoll_ctl(_epfd,EPOLL_CTL_DEL,fd,&ev);
 }
@@ -33,7 +33,7 @@ void Epoll::del(int fd,uint32_t event){
 void Epoll::mod(int fd,uint32_t event){
     struct epoll_event ev;
     ev.data.fd=fd;
-    if(_et) ev.events=event|EPOLLIN;
+    if(_et) ev.events=event|EPOLLET;
     else ev.events=event;
     epoll_ctl(_epfd,EPOLL_CTL_MOD,fd,&ev);
 }

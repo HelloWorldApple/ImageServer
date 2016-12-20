@@ -25,6 +25,12 @@ int ReadInt(int acceptfd){
 
     return res;
 }
+string ReadString(int acceptfd){
+    const int len=ReadInt(acceptfd);
+    char buf[len];
+    ReadAll(acceptfd,buf,len);
+    return string(buf,len);
+}
 
 Mat readMat(int acceptfd){
     int row=ReadInt(acceptfd);
@@ -65,20 +71,39 @@ string image2string(const Mat& image){
     return toSend;
 }
 
-string process2string(int method,const Mat&image){
+string process2string(int method,const string&imagename,const Mat&image){
     string res;
     char methodbuf[sizeof(int)];
     memcpy(methodbuf,&method,sizeof(method));
+
+    int imagenamelen=imagename.length();
+    char namelenbuf[sizeof(int)];
+    memcpy(namelenbuf,&imagenamelen,sizeof(int));
+
     string methodstring=string(methodbuf,sizeof methodbuf);
+    string imagenamelenstring=string(namelenbuf,sizeof namelenbuf);
     string imagestring=image2string(image);
-    return methodstring+imagestring;
+    return methodstring+imagenamelenstring+imagename+imagestring;
 }
-void rgb2gray(const Mat& image,int acceptfd){
+void rgb2gray(const Mat& image,const string& imagename,int acceptfd){
     cv::medianBlur(image,image,11);
 
-    //tell epoll the processing has finished through pipe
-    //write(pipefd,(char*)&acceptfd,sizeof acceptfd);
     string toSend=image2string(image);
     WriteAll(acceptfd,toSend.data(),toSend.size());
 
 }
+
+void saveimage(const Mat& image,const string& imagename,int acceptfd){
+    cv::imwrite(imagename,image);
+    string toSend="save success";
+    WriteAll(acceptfd,toSend.data(),toSend.size());
+}
+void getimage(const Mat& image,const string& imagename,int acceptfd){
+    (void)image;
+    Mat img=cv::imread(imagename);
+    string toSend=image2string(img);
+    WriteAll(acceptfd,toSend.data(),toSend.size());
+
+}
+
+
