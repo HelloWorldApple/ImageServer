@@ -2,6 +2,8 @@
 #include<sstream>
 #include<memory>
 #include"Epoll.h"
+#include"Channel.h"
+#include"Eventloop.h"
 #include"Socket.h"
 #include<sys/sendfile.h>
 #include<sys/stat.h>
@@ -25,7 +27,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     string imagename="lena.jpg";//;argv[2];
-    METHOD methodname=MEDIANBLUR;//argv[1];
+    METHOD methodname=GET;//argv[1];
 
     int sockfd=CreateNonblockingOrDie(PF_INET);
     Socket socket(sockfd);
@@ -42,6 +44,23 @@ int main(int argc, char *argv[])
         image=imread(imagename);
         requeststring=process2string((int)methodname,imagename,image);
         WriteAll(sockfd,requeststring.data(),requeststring.size());
+
+        std::shared_ptr<Epoll> epoller=std::make_shared<Epoll>(1);
+        Eventloop loop(epoller);
+        Channel c(sockfd,&loop);
+        c.setReadCallback([&]()->int{
+            Mat image=readMat(sockfd);
+            string windowname="res";
+            namedWindow(windowname);
+            imshow(windowname,image);
+            waitKey(1000);
+            loop.quit();
+            return 0;
+        });
+        c.setInterestedInRead(true);
+        loop.loop();
+        break;
+        /*//old version:no eventloop and no channel
         Epoll epoller(5);
         epoller.add(sockfd,EPOLLIN);
 
@@ -60,7 +79,7 @@ int main(int argc, char *argv[])
                 }
             }
         }
-        break;
+        break;*/
     }//case
     case SAVE:{
         image=imread(imagename);
@@ -73,6 +92,22 @@ int main(int argc, char *argv[])
     case GET:{
         requeststring=process2string((int)methodname,imagename,Mat());
         WriteAll(sockfd,requeststring.data(),requeststring.size());
+        std::shared_ptr<Epoll> epoller=std::make_shared<Epoll>(1);
+        Eventloop loop(epoller);
+        Channel c(sockfd,&loop);
+        c.setReadCallback([&]()->int{
+              Mat image=readMat(sockfd);
+              string windowname=imagename;
+              namedWindow(windowname);
+              imshow(windowname,image);
+              waitKey(1000);
+              loop.quit();
+              return 0;
+        });
+        c.setInterestedInRead(true);
+        loop.loop();
+        break;
+        /*
         Epoll epoller(5);
         epoller.add(sockfd,EPOLLIN);
 
@@ -91,7 +126,7 @@ int main(int argc, char *argv[])
                 }
             }
         }
-        break;
+        break;*/
     }//case
     }//switch
 

@@ -8,6 +8,8 @@
 #include<memory>
 #include<opencv2/opencv.hpp>
 #include<unordered_map>
+#include"Eventloop.h"
+#include"Channel.h"
 using namespace cv;
 using namespace std;
 const int SERVER_PORT=2224;
@@ -22,7 +24,7 @@ unordered_map<int,function<void(const Mat&,const string&,int)>> FunctionMap;
 
 int main(int argc, char *argv[])
 {
-    /*set funciton map*/
+    //set funciton map
     FunctionMap[(int)MEDIANBLUR]=rgb2gray;
     FunctionMap[(int)SAVE]=saveimage;
     FunctionMap[(int)GET]=getimage;
@@ -36,10 +38,37 @@ int main(int argc, char *argv[])
     socket.bind(serveraddr);
     socket.listen();
 
-    Epoll epoller(100,true);
-    epoller.add(sockfd,EPOLLIN);
-    ThreadPool threadpool(5);
+    ThreadPool threadpool(3);
 
+    //Epoll epoller(100,true);
+    std::shared_ptr<Epoll> epoller=std::make_shared<Epoll>(10,true);
+    Eventloop loop(epoller);
+    Channel channel(sockfd,&loop);
+    channel.setInterestedInRead(true);//will add events into epoll
+    auto readcallback=[&](){
+        Addr clientAddr;
+        int acceptfd=socket.accept(clientAddr);
+        //create a new thread to read data
+        threadpool.addTask(
+                    Task(
+                        [=](){
+                        int method=ReadInt(acceptfd);
+                        string imagename=ReadString(acceptfd);
+                        Mat image;
+                        if(method!=(int)GET)
+                            image=readMat(acceptfd);
+                        FunctionMap[method](image,imagename,acceptfd);
+                        //threadpool.addTask(Task(std::bind(FunctionMap[method],image,acceptfd,fd[1])));
+                        }
+                        )
+                    );
+    };
+    channel.setReadCallback(readcallback);
+    loop.loop();
+}
+
+
+/*//old version:no eventloop
     while(1){
         cout<<"inter loop"<<endl;
         int eventcount=epoller.wait(-1);
@@ -68,6 +97,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-}
+}*/
 
 
