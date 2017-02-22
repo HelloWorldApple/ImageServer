@@ -29,8 +29,9 @@ int main(int argc, char *argv[])
     string imagename="lena.jpg";//;argv[2];
     METHOD methodname=GET;//argv[1];
 
-    int sockfd=CreateNonblockingOrDie(PF_INET);
-    Socket socket(sockfd);
+   // int sockfd=CreateNonblockingOrDie(PF_INET);
+    Socket socket;
+    int sockfd=socket.getsockfd();
     socket.setReuseAddr(1);
     socket.setReusePort(1);
     Addr serverAddr(SERVER_IP,SERVER_PORT);

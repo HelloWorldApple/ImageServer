@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="Server" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\..\usr\local\share\OpenCV\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="Server">
+         <Option output="/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Server" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/home/xieyajin/Documents/OnlineImageProcess/Server/../Jnetlib" />
+            <Add directory="/usr/include" />
+            <Add directory="/usr/include/c++/4.8" />
+            <Add directory="/usr/include/c++/4.8/backward" />
+            <Add directory="/usr/include/x86_64-linux-gnu" />
+            <Add directory="/usr/include/x86_64-linux-gnu/c++/4.8" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed" />
+            <Add directory="/usr/local/include" />
+            <Add directory="/usr/local/include/opencv" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 Server" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="Server/fast">
+         <Option output="/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Server" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/home/xieyajin/Documents/OnlineImageProcess/Server/../Jnetlib" />
+            <Add directory="/usr/include" />
+            <Add directory="/usr/include/c++/4.8" />
+            <Add directory="/usr/include/c++/4.8/backward" />
+            <Add directory="/usr/include/x86_64-linux-gnu" />
+            <Add directory="/usr/include/x86_64-linux-gnu/c++/4.8" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
+            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed" />
+            <Add directory="/usr/local/include" />
+            <Add directory="/usr/local/include/opencv" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 Server/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Addr.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/BlockingQueue.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Channel.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Epoll.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Eventloop.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/LimitedBlockingQueue.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Mutex.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Socket.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Task.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Thread.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/ThreadPool.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/WaitCondition.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/Functions.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/Server.cpp">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Addr.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/BlockingQueue.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Channel.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Epoll.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Eventloop.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/LimitedBlockingQueue.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Mutex.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Socket.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Task.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/Thread.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/ThreadPool.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Jnetlib/WaitCondition.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/Functions.h">
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/../../../../../usr/local/share/OpenCV/OpenCVConfig-version.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\" />
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/../../../../../usr/local/share/OpenCV/OpenCVConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\" />
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/../../../../../usr/local/share/OpenCV/OpenCVModules.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\" />
+      </Unit>
+      <Unit filename="/home/xieyajin/Documents/OnlineImageProcess/Server/../../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\share\OpenCV\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>

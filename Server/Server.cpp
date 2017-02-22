@@ -29,8 +29,9 @@ int main(int argc, char *argv[])
     FunctionMap[(int)SAVE]=saveimage;
     FunctionMap[(int)GET]=getimage;
 
-    int sockfd=CreateNonblockingOrDie(PF_INET);
-    Socket socket(sockfd);
+    //int sockfd=CreateNonblockingOrDie(PF_INET);
+    Socket socket;
+    int sockfd=socket.getsockfd();
     socket.setReuseAddr(1);
     socket.setReusePort(1);
 
