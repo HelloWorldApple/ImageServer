@@ -1,1 +1,0 @@
-/home/xieyajin/Documents/OnlineImageProcess/build-Server-Desktop-Default/CMakeFiles/Server.dir
