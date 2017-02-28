@@ -21,13 +21,13 @@ const int MAXFILESIZE=1000000;
 int main(int argc, char *argv[])
 {
 
-    argc=3;
-    if(argc!=3){
-        cerr<<"useage:./Client METHOD(0:medianblur\1:save) IMAGENAME";
-        return 1;
-    }
+    //argc=3;
+    //if(argc!=3){
+    //    cerr<<"useage:./Client METHOD(0:medianblur\1:save) IMAGENAME";
+    //    return 1;
+    //}
     string imagename="lena.jpg";//;argv[2];
-    METHOD methodname=GET;//argv[1];
+    METHOD methodname=MEDIANBLUR;//argv[1];
 
    // int sockfd=CreateNonblockingOrDie(PF_INET);
     Socket socket;

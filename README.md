@@ -16,6 +16,26 @@ This project has a net library  based on pthread,socket API in Linux.Object orie
 request format:method(int)+imagename(namelen(int)+name(char*))+image(row(int)+col(int)+type(int)+MatDatalength(int)+MatData(char*)).
 
 The server parses the request from clients and judges how to process the image by "method" in the request.Then,Server puts the task in the threadpool.When the work finished,server send the image back to client.
+
+##Get start
+There is a medianblur example in dir 'Client' and 'Server'.Follow steps:
+
+cd Server
+
+cmake .
+
+make
+
+./Server&
+
+cd ../Client
+
+cmake .
+
+make
+
+./Client
+
 ##Library
 OpenCV 3.1
 
