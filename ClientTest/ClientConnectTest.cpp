@@ -17,7 +17,7 @@ const char* SERVER_IP="127.0.0.1";
 
 int main(int argc, char *argv[])
 {
-    const int N=25000;
+    const int N=1;
     auto func=[](){
         Socket socket;
         socket.setReuseAddr(1);
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     };
     vector<Socket> v(N);
     Addr serverAddr(SERVER_IP,SERVER_PORT);
-    time_t start=clock();
+    //time_t start=clock();
     for(int i=0;i<N;i++){
         v[i].setReuseAddr(1);
         v[i].setReusePort(1);
@@ -35,6 +35,6 @@ int main(int argc, char *argv[])
         v[i].connect(serverAddr);
 
     }
-    double usetime=(clock()-start)/CLOCKS_PER_SEC;
-    std::cout<<usetime<<endl;
+    //double usetime=(clock()-start)/CLOCKS_PER_SEC;
+    //std::cout<<usetime<<endl;
 }
