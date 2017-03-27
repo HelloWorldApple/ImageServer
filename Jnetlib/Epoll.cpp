@@ -25,9 +25,10 @@ void Epoll::add(int fd,uint32_t event){
 void Epoll::del(int fd,uint32_t event){
     struct epoll_event ev;
     ev.data.fd=fd;
-    if(_et) ev.events=event|EPOLLET;
+    if(_et) ev.events=event;
     else ev.events=event;
     epoll_ctl(_epfd,EPOLL_CTL_DEL,fd,&ev);
+
 }
 
 void Epoll::mod(int fd,uint32_t event){

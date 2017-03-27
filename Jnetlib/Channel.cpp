@@ -4,8 +4,10 @@
 void Channel::setInterestedInRead(bool on){
     if(on){
         _events|=EPOLLIN;
+
     }else{
         _events&=~EPOLLIN;
+
     }
     update();
 }

@@ -8,13 +8,19 @@ class Channel{
 public:
     using EventCallback=std::function<void()>;
     //typedef std::function<void()> EventCallback;
-    Channel(int fd,Eventloop* loop)
+
+    Channel(int fd=0,Eventloop* loop=0)
         :_fd(fd),_index(-1),_loop(loop),_events(0),_revents(0)
     {
 
     }
 
     ~Channel(){}
+    void set_fd_loop(int fd,Eventloop* loop){
+        _fd=fd;
+        _loop=loop;
+    }
+
     void setReadCallback(const EventCallback &cb){_readcb=cb;}
     void setWriteCallback(const EventCallback &cb){_writecb=cb;}
     void setCloseCallback(const EventCallback &cb){_closecb=cb;}
