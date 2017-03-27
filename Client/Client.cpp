@@ -44,19 +44,25 @@ int main(int argc, char *argv[])
 
         image=imread(imagename);
         requeststring=process2string((int)methodname,imagename,image);
+
         WriteAll(sockfd,requeststring.data(),requeststring.size());
 
-        std::shared_ptr<Epoll> epoller=std::make_shared<Epoll>(1);
+
+        std::shared_ptr<Epoll> epoller=std::make_shared<Epoll>(1,true);
         Eventloop loop(epoller);
         Channel c(sockfd,&loop);
-        c.setReadCallback([&]()->int{
+        //static int imageindex=0;
+        c.setReadCallback([&](){
             Mat image=readMat(sockfd);
             string windowname="res";
+            //imageindex++;
             namedWindow(windowname);
             imshow(windowname,image);
+            cout<<"receive"<<endl;
             waitKey(1000);
+            destroyWindow(windowname);
             loop.quit();
-            return 0;
+
         });
         c.setInterestedInRead(true);
         loop.loop();
