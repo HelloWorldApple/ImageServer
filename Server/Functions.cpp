@@ -85,11 +85,31 @@ string process2string(int method,const string&imagename,const Mat&image){
     string imagestring=image2string(image);
     return methodstring+imagenamelenstring+imagename+imagestring;
 }
-void rgb2gray(const Mat& image,const string& imagename,int acceptfd){
-    cv::medianBlur(image,image,11);
 
-    string toSend=image2string(image);
-    WriteAll(acceptfd,toSend.data(),toSend.size());
+bool existFile(const string& filename,Mat& res){
+    try{
+        res=cv::imread(filename);
+    }catch(...){
+        return false;
+    }
+
+    return res.data!=nullptr;
+}
+
+void medianblur(const Mat& image,const string& imagename,int acceptfd){
+    std::cout<<"medianblur function"<<std::endl;
+    Mat sendImg;
+    if(existFile("medianblur_"+std::to_string(image.rows)+"_"+std::to_string(image.cols)+imagename,sendImg)){
+        string toSend=image2string(sendImg);
+        WriteAll(acceptfd,toSend.data(),toSend.size());
+    }else{
+        cv::medianBlur(image,image,11);
+        cv::imwrite("medianblur_"+std::to_string(image.rows)+"_"+std::to_string(image.cols)+imagename,image);
+        string toSend=image2string(image);
+        WriteAll(acceptfd,toSend.data(),toSend.size());
+    }
+
+
 
 }
 

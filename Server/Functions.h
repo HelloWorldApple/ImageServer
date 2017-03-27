@@ -19,7 +19,7 @@ string image2string(const Mat& image);
 string process2string(int method,const string&imagename,const Mat&image);
 
 //image process funciton
-void rgb2gray(const Mat& image,const string& imagename,int acceptfd);
+void medianblur(const Mat& image,const string& imagename,int acceptfd);
 void saveimage(const Mat& image,const string& imagename,int acceptfd);
 void getimage(const Mat& image,const string& imagename,int acceptfd);
 #endif
