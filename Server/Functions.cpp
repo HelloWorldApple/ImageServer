@@ -1,5 +1,6 @@
 #include"Functions.h"
 #include"../Jnetlib/Socket.h"
+#include"../Jnetlib/LRUCache.h"
 void split(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss;
     ss.str(s);
@@ -96,15 +97,29 @@ bool existFile(const string& filename,Mat& res){
     return res.data!=nullptr;
 }
 
-void medianblur(const Mat& image,const string& imagename,int acceptfd){
+void medianblur(const Mat& image,const string& imagename,int acceptfd,LRUCache<string,Mat>& imagepool){
     std::cout<<"medianblur function"<<std::endl;
-    Mat sendImg;
-    if(existFile("medianblur_"+std::to_string(image.rows)+"_"+std::to_string(image.cols)+imagename,sendImg)){
+    //Mat sendImg;
+    /*if(existFile("medianblur_"+std::to_string(image.rows)+"_"+std::to_string(image.cols)+imagename,sendImg)){
         string toSend=image2string(sendImg);
         WriteAll(acceptfd,toSend.data(),toSend.size());
     }else{
         cv::medianBlur(image,image,11);
         cv::imwrite("medianblur_"+std::to_string(image.rows)+"_"+std::to_string(image.cols)+imagename,image);
+        string toSend=image2string(image);
+        WriteAll(acceptfd,toSend.data(),toSend.size());
+    }*/
+    string filename="medianblur_"+std::to_string(image.rows)+"_"+std::to_string(image.cols)+imagename;
+    if(imagepool.contain(filename)){
+        cout<<"contain"<<endl;
+        Mat sendImg=imagepool.get(filename);
+        string toSend=image2string(sendImg);
+        WriteAll(acceptfd,toSend.data(),toSend.size());
+    }else{
+        cout<<"not contain"<<endl;
+        cv::medianBlur(image,image,11);
+        cv::imwrite(filename,image);
+        imagepool.put(filename,image);
         string toSend=image2string(image);
         WriteAll(acceptfd,toSend.data(),toSend.size());
     }
@@ -113,12 +128,12 @@ void medianblur(const Mat& image,const string& imagename,int acceptfd){
 
 }
 
-void saveimage(const Mat& image,const string& imagename,int acceptfd){
+void saveimage(const Mat& image,const string& imagename,int acceptfd,LRUCache<string,Mat>& imagepool){
     cv::imwrite(imagename,image);
     string toSend="save success";
     WriteAll(acceptfd,toSend.data(),toSend.size());
 }
-void getimage(const Mat& image,const string& imagename,int acceptfd){
+void getimage(const Mat& image,const string& imagename,int acceptfd,LRUCache<string,Mat>& imagepool){
     (void)image;
     Mat img=cv::imread(imagename);
     string toSend=image2string(img);

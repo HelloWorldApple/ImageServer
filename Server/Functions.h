@@ -5,6 +5,7 @@
 #include<opencv2/opencv.hpp>
 #include<memory>
 #include<string>
+#include"../Jnetlib/LRUCache.h"
 using std::string;
 using std::shared_ptr;
 using cv::Mat;
@@ -19,7 +20,7 @@ string image2string(const Mat& image);
 string process2string(int method,const string&imagename,const Mat&image);
 
 //image process funciton
-void medianblur(const Mat& image,const string& imagename,int acceptfd);
-void saveimage(const Mat& image,const string& imagename,int acceptfd);
-void getimage(const Mat& image,const string& imagename,int acceptfd);
+void medianblur(const Mat& image,const string& imagename,int acceptfd,LRUCache<string,Mat>& imagepool);
+void saveimage(const Mat& image,const string& imagename,int acceptfd,LRUCache<string,Mat>& imagepool);
+void getimage(const Mat& image,const string& imagename,int acceptfd,LRUCache<string,Mat>& imagepool);
 #endif
