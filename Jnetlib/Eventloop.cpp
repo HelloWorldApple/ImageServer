@@ -80,3 +80,45 @@ void Eventloop::removeChannel(Channel* c){
 bool Eventloop::hasChannel(Channel* c){
     return _channelMap.find(c->getfd())!=_channelMap.end();
 }
+
+/**********eventloopthread******************/
+EventloopThread::EventloopThread(const Func& callback)
+    :
+      _thread(std::bind(&EventloopThread::threadFunc,this)),
+      _loop(0),
+      _mutex(),
+      _cond(_mutex),
+      _callback(callback)
+
+{
+
+}
+
+Eventloop* EventloopThread::startLoopThread(){
+    _thread.run();
+    {
+        MutexLockGuard lock(_mutex);
+        while(_loop==nullptr){
+            _cond.wait();
+        }
+    }
+    return _loop;
+}
+
+void EventloopThread::threadFunc(){
+    Eventloop loop;
+    if(_callback){
+        _callback(&loop);
+    }
+    {
+        MutexLockGuard lock(_mutex);
+        _loop=&loop;
+        _cond.wakeOne();
+    }
+    loop.loop();
+    _loop=nullptr;
+}
+
+
+
+
