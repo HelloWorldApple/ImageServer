@@ -126,12 +126,7 @@ int main(int argc, char *argv[])
         Addr clientAddr;
         acceptfd=socket.accept(clientAddr);//should not local var,catch by lambda keep living
 
-//为何使用阻塞io
 
-//原方案ET+非阻塞，由于数据流较长，导致ET多次触发。由于读取部分已
-//经定死了，即先读取长度在读取图片数据。所以需要一次出发内读取完毕，这里如果使用非阻塞io
-//无法达到一次性读完。所以改用阻塞io，LT模式下使用阻塞io，循环读，并制定所需字节数
-//，防止最后一次io阻塞。
 //
         //!!!!!!!!!!!!!!!!!
         //SetNonBlock(acceptfd);//?????why cannot nonblock fd????
@@ -230,13 +225,7 @@ int main(int argc, char *argv[])
         Addr clientAddr;
         acceptfd=socket.accept(clientAddr);//should not local var,catch by lambda keep living
 
-//为何使用阻塞io
 
-//原方案ET+非阻塞，由于数据流较长，导致ET多次触发。由于读取部分已
-//经定死了，即先读取长度在读取图片数据。所以需要一次出发内读取完毕，这里如果使用非阻塞io
-//无法达到一次性读完。所以改用阻塞io，LT模式下使用阻塞io，循环读，并制定所需字节数
-//，防止最后一次io阻塞。
-//
         //!!!!!!!!!!!!!!!!!
         //SetNonBlock(acceptfd);//?????why cannot nonblock fd????
 
@@ -324,15 +313,14 @@ int main(int argc, char *argv[])
     socket.listen();
 
     ThreadPool threadpool(4);
-    LRUCache<string,Mat> imagepool(10);
-    //Epoll epoller(100,true);
-    std::shared_ptr<Epoll> epoller=std::make_shared<Epoll>(100,1);//use LT!!!!!!!!!!!!!
+    LRUCache<string,Mat> imagepool(100);
+    std::shared_ptr<Epoll> epoller=std::make_shared<Epoll>(100,1);
     Eventloop loop(epoller);
     Channel channel(sockfd,&loop);
     channel.setInterestedInRead(true);//will add events into epoll
 
     int acceptfd;
-    Channel readchannel;
+    Channel readchannel;//must global,chatch by lamda
 
     auto listencallback=[&](){
         cout<<"new connect"<<endl;
@@ -340,9 +328,9 @@ int main(int argc, char *argv[])
         acceptfd=socket.accept(clientAddr);//should not local var,catch by lambda keep living
 
         //!!!!!!!!!!!!!!!!!
-        SetNonBlock(acceptfd);//?????why cannot nonblock fd????
+        SetNonBlock(acceptfd);//
 
-        readchannel.set_fd_loop(acceptfd,&loop);//must global,chatch by lamda
+        readchannel.set_fd_loop(acceptfd,&loop);
 
         readchannel.setInterestedInRead(true);
 
@@ -400,4 +388,33 @@ int main(){
     cout<<l.get(1)<<endl;//0
     cout<<l.get(3)<<endl;//c
     cout<<l.get(4)<<endl;//d
+}*/
+
+/*
+#include"ImageHash.h"
+#include <string>
+using namespace cv;
+using namespace std;
+int main() {
+
+    string ImageName1 = "lena.jpg";
+    string ImageName2="medianblur_512_512lena.jpg";
+    Mat Image1,Image2;
+    Image1=cv::imread(ImageName1);
+    Image2=cv::imread(ImageName2);
+    int iDiffNum = PerHash(Image1,Image2);
+
+    cout << "iDiffNum = " << iDiffNum << endl;
+
+
+    //得到指纹以后，就可以对比不同的图片，看看64位中有多少位是不一样的。
+    //在理论上，这等同于计算"汉明距离"（Hamming distance）。
+    //如果不相同的数据位不超过5，就说明两张图片很相似；如果大于10，就说明这是两张不同的图片。
+    if (iDiffNum <= 5)
+        cout << "two images are very similar!" << endl;
+    else if (iDiffNum > 10)
+        cout << "they are two different images!" << endl;
+    else
+        cout << "two image are somewhat similar!" << endl;
+    //char ch = getchar();
 }*/

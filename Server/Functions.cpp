@@ -1,6 +1,7 @@
 #include"Functions.h"
 #include"../Jnetlib/Socket.h"
 #include"../Jnetlib/LRUCache.h"
+#include"ImageHash.h"
 void split(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss;
     ss.str(s);
@@ -110,17 +111,29 @@ void medianblur(const Mat& image,const string& imagename,int acceptfd,LRUCache<s
         WriteAll(acceptfd,toSend.data(),toSend.size());
     }*/
     string filename="medianblur_"+std::to_string(image.rows)+"_"+std::to_string(image.cols)+imagename;
-    if(imagepool.contain(filename)){
-        cout<<"contain"<<endl;
+    string toSend;
+    if(imagepool.contain(filename)&&PerHash(image,imagepool.get(filename))<10){//file hash to identify image which has same imagename
+        cout<<"pool contain!"<<endl;
         Mat sendImg=imagepool.get(filename);
         string toSend=image2string(sendImg);
         WriteAll(acceptfd,toSend.data(),toSend.size());
     }else{
-        cout<<"not contain"<<endl;
-        cv::medianBlur(image,image,11);
-        cv::imwrite(filename,image);
-        imagepool.put(filename,image);
-        string toSend=image2string(image);
+        cout<<"pool not contain!"<<endl;
+        Mat res;
+        if(existFile(filename,res)){
+            cv::waitKey(1000);//cost time
+            std::cout<<"exist file"<<std::endl;
+            imagepool.put(filename,res);
+            toSend=image2string(res);
+        }else{
+            std::cout<<"do task"<<std::endl;
+            cv::waitKey(1000);//cost time
+            cv::medianBlur(image,res,11);
+            cv::imwrite(filename,res);
+            imagepool.put(filename,res);
+            toSend=image2string(res);
+        }
+
         WriteAll(acceptfd,toSend.data(),toSend.size());
     }
 

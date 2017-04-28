@@ -1,5 +1,6 @@
 #include"Socket.h"
-
+#include<error.h>
+#include<errno.h>
 void SetNonBlock(int sockfd){
     int flags=fcntl(sockfd,F_GETFL,0);
     flags|=O_NONBLOCK;
@@ -70,7 +71,18 @@ ssize_t ReadAll(int sockfd,void *buf,size_t count){
     ssize_t readed=0;
     while(readed!=count){
         ssize_t onceRead=read(sockfd,buf,count-readed);
-        if(onceRead==0) return readed;
+        if(onceRead==-1){
+            if(errno==EINTR){
+                //onceRead=0;
+                continue;
+            }else if(errno==EAGAIN){
+                //onceRead=0;
+                continue;
+            }
+            else return -1;
+        }
+        else if(onceRead==0) break;//EOF
+
         readed+=onceRead;
         buf+=onceRead;
     }
@@ -89,7 +101,19 @@ ssize_t WriteAll(int sockfd,const void* buf,size_t count){
     ssize_t written=0;
     while(written!=count){
         ssize_t onceWritten=write(sockfd,buf,count-written);
-        if(onceWritten==0) return written;
+        if(onceWritten==-1){
+            if(errno==EINTR){
+                //onceWritten=0;
+                continue;
+            }else if(errno==EAGAIN){
+                //onceWritten=0;
+                continue;
+            }
+            else{
+                return -1;
+            }
+        }
+        else if(onceWritten==0)  break;//
         written+=onceWritten;
         buf+=onceWritten;
     }
